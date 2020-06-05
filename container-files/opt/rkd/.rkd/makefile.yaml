@@ -18,4 +18,4 @@ tasks:
             fi
 
             rkd --no-ui :j2:render --source=${TEMPLATE}.nginx.conf.j2 --output=/etc/nginx/nginx.conf
-            exec nohup nginx -c /etc/nginx/nginx.conf ${ARG_PARAMETERS}
+            exec nohup sh -c "nginx -c /etc/nginx/nginx.conf ${ARG_PARAMETERS}"
