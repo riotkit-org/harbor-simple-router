@@ -1,0 +1,54 @@
+version: org.riotkit.rkd/0.8
+imports:
+    - rkd.standardlib.jinja
+    - rkt_ciutils.docker
+
+arguments: &arguments
+    "--version":
+        default: "SNAPSHOT"
+        help: "Tag to apply for a docker image"
+
+tasks:
+    :build:
+        description: Build a container
+        arguments: *arguments
+        steps: |
+            [[ ! $ARG_VERSION ]] && ARG_VERSION="SNAPSHOT";
+
+            docker build . -f ./Dockerfile -t quay.io/riotkit/harbor-simple-router:${ARG_VERSION}
+
+    :push:
+        description: Push a container
+        arguments: *arguments
+        steps: |
+            [[ ! $ARG_VERSION ]] && ARG_VERSION="SNAPSHOT";
+
+            docker push quay.io/riotkit/harbor-simple-router:${ARG_VERSION}
+
+    :test:check:
+        description: Test run the container with a syntax check
+        arguments:
+            "--version":
+                default: "SNAPSHOT"
+                help: "Tag to apply for a docker image"
+            "--env-file":
+                help: "Env file name from 'test' directory"
+                default: ""
+        steps: |
+            [[ ! $ARG_VERSION ]] && ARG_VERSION="SNAPSHOT";
+
+            cd test
+            export ENV_FILE=${ARG_ENV_FILE}
+            docker-compose -p hsr up
+
+    :test:
+        description: Perform test checks on the container
+        arguments: *arguments
+        steps: |
+            [[ ! $ARG_VERSION ]] && ARG_VERSION="SNAPSHOT";
+
+            rkd :test:check --env-file=redirect-to-new-domain.env
+
+    :generate-readme:
+        description: Before commiting, please regenerate the README.md from template
+        steps: rkd :docker:generate-readme -f ./Dockerfile -rt ./README.md.j2 --target-path ./README.md && git add README.md

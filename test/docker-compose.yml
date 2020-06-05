@@ -1,0 +1,8 @@
+version: "3.4"
+
+services:
+    harbor_simple_router:
+        image: quay.io/riotkit/harbor-simple-router:${ARG_VERSION}
+        env_file:
+            - "${ENV_FILE}"
+        command: "--parameters='-t'"

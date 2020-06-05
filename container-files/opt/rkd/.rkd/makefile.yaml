@@ -1,0 +1,21 @@
+version: org.riotkit.rkd/0.8
+imports:
+    - rkd.standardlib.jinja
+tasks:
+    :start:
+        description: Render configuration and start NGINX
+        arguments:
+            "--parameters":
+                help: "Extra NGINX parameters. Use eg. -t for testing"
+                default: ""
+        steps: |
+            cd /opt/nginx/templates
+
+            if [[ ! -f "${TEMPLATE}.nginx.conf.j2" ]]; then
+                echo "Please type a correct template name (without .nginx.conf.j2) in TEMPLATE variable"
+                ls -la ./
+                exit 1
+            fi
+
+            rkd --no-ui :j2:render --source=${TEMPLATE}.nginx.conf.j2 --output=/etc/nginx/nginx.conf
+            exec nohup nginx -c /etc/nginx/nginx.conf "${ARG_PARAMETERS}"

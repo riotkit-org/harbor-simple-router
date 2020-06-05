@@ -1,0 +1,46 @@
+user nginx;
+daemon off;
+worker_processes {{ NGINX_WORKER_PROCESSES }};
+pid /var/run/nginx.pid;
+
+events {
+    {% block EVENTS %}
+    worker_connections {{ NGINX_WORKER_CONNECTIONS }};
+    multi_accept off;
+    {% endblock %}
+}
+
+http {
+    {% block HTTP_SETTINGS %}
+    sendfile {{ NGINX_SENDFILE }};
+    tcp_nopush {{ NGINX_TCP_NOPUSH }};
+    tcp_nodelay {{ NGINX_TCP_NODELAY }};
+    keepalive_timeout {{ NGINX_KEEPALIVE_TIMEOUT }};
+    types_hash_max_size {{ NGINX_TYPES_HASH_MAX_SIZE }};
+    client_max_body_size {{ NGINX_CLIENT_MAX_BODY_SIZE }};
+    server_tokens off;
+
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    fastcgi_temp_file_write_size {{ NGINX_FCGI_TEMP_WRITE_SIZE }};
+    fastcgi_busy_buffers_size {{ NGINX_FCGI_BUSY_BUFF_SIZE }};
+    fastcgi_buffer_size {{ NGINX_FCGI_BUFF_SIZE }};
+    fastcgi_buffers {{ NGINX_FCGI_BUFFERS }};
+    proxy_request_buffering {{ NGINX_REQUEST_BUFFERING }};
+
+    access_log /dev/stdout;
+    error_log /dev/stderr;
+
+    gzip {{ NGINX_GZIP }};
+    gzip_disable "msie6";
+    {% endblock %}
+
+    server {
+        listen 80 {{ DOMAINS|default('default_server') }};
+        listen [::]:80 {{ DOMAINS|default('default_server') }};
+
+        {% block SERVER %}
+        {% endblock %}
+    }
+}

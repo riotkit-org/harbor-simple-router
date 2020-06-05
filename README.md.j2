@@ -1,0 +1,31 @@
+Harbor Simple Router
+====================
+
+Provides an NGINX image with predefined templates, controlled by environment variables.
+
+Based on Harbor's concept - an external gateway with service discovery is routing traffic to containers by domain name,
+simple router does not replace gateway, it should be put in place of application container to eg. do rewrites, redirects, proxying etc.
+
+Example architecture
+--------------------
+
+Gateway + Service Discovery routes traffic to selected container by hostname -> Simple Router reacts for eg. forum.zsp.net.pl and performs redirection to super-hiper-new-forum.zsp.net.pl
+
+#### Configuration reference
+
+List of all common environment variables and their defaults. Those variables are used regardless of template.
+
+```yaml
+{% for env_var, attrs in DOCKERFILE_ENVS.items() %}{% if attrs[2] %}# {{ attrs[2] }}{% endif %}
+- {{ attrs[0] }} # (default: {{ attrs[1] }})
+
+{% endfor %}
+```
+
+# Templates
+
+## redirect-to-new-domain
+
+Variables:
+- TEMPLATE="redirect-to-new-domain"
+- NEW_DOMAIN (example: iwa-ait.org)
