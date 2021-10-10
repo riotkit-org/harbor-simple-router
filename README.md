@@ -74,7 +74,7 @@ Redirects to a new domain. Preserves HTTP/HTTPS scheme and request URI.
 - TEMPLATE="redirect-to-new-domain"
 - NEW_DOMAIN (example: iwa-ait.org)
 
-## reditect-to-url
+## redirect-to-url
 
 Redirect to a given URL, does not preserve scheme or request URI.
 
