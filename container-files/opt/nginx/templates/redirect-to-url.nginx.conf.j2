@@ -1,0 +1,5 @@
+{% extends "base.nginx.conf.j2" %}
+
+{% block SERVER %}
+return 301 {{ REDIRECT_URL }};
+{% endblock %}

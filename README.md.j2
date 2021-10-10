@@ -26,6 +26,16 @@ List of all common environment variables and their defaults. Those variables are
 
 ## redirect-to-new-domain
 
-Variables:
+Redirects to a new domain. Preserves HTTP/HTTPS scheme and request URI.
+
+**Variables:**
 - TEMPLATE="redirect-to-new-domain"
 - NEW_DOMAIN (example: iwa-ait.org)
+
+## reditect-to-url
+
+Redirect to a given URL, does not preserve scheme or request URI.
+
+**Variables:**
+- TEMPLATE="redirect-to-url"
+- REDIRECT_URL="https://zsp.net.pl/statut"
