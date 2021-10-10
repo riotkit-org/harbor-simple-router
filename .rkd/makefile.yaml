@@ -48,6 +48,7 @@ tasks:
             [[ ! $ARG_VERSION ]] && ARG_VERSION="SNAPSHOT";
 
             rkd :test:check --env-file=redirect-to-new-domain.env
+            rkd :test:check --env-file=redirect-to-url.env
 
     :generate-readme:
         description: Before commiting, please regenerate the README.md from template
