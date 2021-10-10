@@ -1,4 +1,4 @@
-version: org.riotkit.rkd/0.8
+version: org.riotkit.rkd/yaml/v1
 imports:
     - rkd.standardlib.jinja
     - rkt_ciutils.docker
